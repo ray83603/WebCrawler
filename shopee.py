@@ -16,7 +16,7 @@ keyword = 'nike'
 page = 2
 ecode = 'utf-8-sig'
 
-# 2022/11/21 由於蝦皮API更新，商品細節資料無法再單純使用request爬取，因此header只留給爬留言使用，而流言的API沒什麼檢查
+
 my_headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
     'if-none-match-': 'adbff-a770-4ef3-8f11-fa44a810333e'
@@ -35,10 +35,10 @@ def goods_comments(item_id, shop_id):
     return gj['data']['ratings']
     
 
-# 進入每個商品，抓取賣家更細節的資料（商品文案、SKU）
+# 進入每個商品，抓取賣家更細節的資料（商品文案）
 # https://shopee.tw/api/v4/item/get?itemid=17652103038&shopid=36023817
 def goods_detail(url, item_id, shop_id):
-    # 2022/12/29 ivan，因shopee API新增了防爬蟲機制，header中多了「af-ac-enc-dat」參數，因解析不出此參數如何製成，只能使用土法煉鋼，一頁一頁進去攔封包
+    
     driver.get(url) # 需要到那個頁面，才能度過防爬蟲機制
     time.sleep(random.randint(10,20))
     getPacket = ''
@@ -46,7 +46,7 @@ def goods_detail(url, item_id, shop_id):
         if request.response:
             # 挑出商品詳細資料的json封包
             if 'https://shopee.tw/api/v4/item/get?itemid=' + str(item_id) + '&shopid=' + str(shop_id) in request.url:
-                # 此封包是有壓縮的，因此需要解壓縮
+                # 解壓縮
                 getPacket = zlib.decompress(
                     request.response.body,
                     16+zlib.MAX_WBITS
@@ -166,8 +166,6 @@ for i in range(int(page)):
             # '商品ID':itemid,
             # '賣家ID':shopid,
             '商品名稱':name
-            
-            
             }
     dic2 = {'商品連結':link}
     dic3 = {'價格':price}
@@ -178,22 +176,18 @@ for i in range(int(page)):
     print(dic4)
 
     #資料整合
-    # container_product = pd.concat([container_product,pd.DataFrame(dic)], axis=0)
-    #暫時存檔紀錄
-    # container_product.to_csv('shopeeAPIData'+str(i+1)+'_Product.csv', encoding = ecode, index=False)
+    container_product = pd.concat([container_product,pd.DataFrame(dic1)], axis=0)
+    # 暫時存檔紀錄
+    container_product.to_csv('shopeeAPIData'+str(i+1)+'_Product.csv', encoding = ecode, index=False)
     # container_comment.to_csv('shopeeAPIData'+str(i+1)+'_Comment.csv', encoding = ecode, index=False)
 
-    # print('目前累積商品： ' + str(len(container_product)) + ' 留言累積' )
-    # time.sleep(random.randint(20,150)) # 休息久一點
+    
+    # time.sleep(random.randint(20,150)) 
 # + str(len(container_comment))
-# container_product.to_csv(keyword +'_商品資料.csv', encoding = ecode, index=False)
+container_product.to_csv(keyword +'_商品資料.csv', encoding = ecode, index=False)
 # container_comment.to_csv(keyword +'_留言資料.csv', encoding = ecode, index=False)
 
-# tEnd = time.time()#計時結束
-# totalTime = int(tEnd - tStart)
-# minute = totalTime // 60
-# second = totalTime % 60
-# print('資料儲存完成，花費時間（約）： ' + str(minute) + ' 分 ' + str(second) + '秒')
+
 
 driver.close() 
 
