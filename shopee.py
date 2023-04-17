@@ -2,7 +2,7 @@ import requests
 import json
 import pandas as pd
 import time
-from seleniumwire import webdriver # 需安裝：pip install selenium-wire
+from seleniumwire import webdriver      # pip install selenium-wire
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
