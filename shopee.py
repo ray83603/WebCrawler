@@ -23,7 +23,7 @@ my_headers = {
     }    
 # 55b03-6d83b58414a54cb5ffbe81099940f836
 
-# 進入每個商品，抓取買家留言
+# 進入每個商品抓取
 def goods_comments(item_id, shop_id):
     url = 'https://shopee.tw/api/v4/item/get_ratings?filter=0&flag=1&itemid='+ str(item_id) + '&limit=50&offset=0&shopid=' + str(shop_id) + '&type=0'
     r = requests.get(url,headers = my_headers)
