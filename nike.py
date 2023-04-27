@@ -3,7 +3,6 @@ import json
 import pymysql
 
 
-# Make GET request to site
 count = 60
 anchor = 0
 country = 'tw'
@@ -16,7 +15,7 @@ output = json.loads(html.text)
 
 # print(html.text)
 
-# Loop through products and print name
+# 利用迴圈抓取
 for item in output['data']['products']['products']:
     
     
@@ -69,7 +68,7 @@ for item in output['data']['products']['products']:
             # sql = "INSERT INTO TestOne(name, price, img, source)VALUES(%s, %s, %s, %s)",
             #                (titleLists_str, imageUrlLists_str, priceList,  productUrlLists_str)
             cursor.execute("INSERT INTO Nike(name, price, img, source, subtitle)VALUES(%s, %s, %s, %s, %s)",
-                           (titleLists_str, imageUrlLists_str, priceLists_str,  productUrlLists_str, subtitleLists_str))  #加入SQL
+                           (titleLists_str, priceLists_str, imageUrlLists_str,  productUrlLists_str, subtitleLists_str))  #加入SQL
             conn.commit()
         
 
